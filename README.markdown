@@ -1,4 +1,4 @@
 # Stochastic State Monad Transformer
 
-A very limited (and slow!) implementation of markov processes using the `StateT`
-and `RandT` monad transformers.
+A demo (mostly for personal reference) of monad transformers in Haskell, using
+a model of markov processes to demonstrate.

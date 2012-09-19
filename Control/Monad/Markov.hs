@@ -22,7 +22,6 @@ newtype MarkovT g s m a = MarkovT (RandT g (StateT s m) a)
 runMarkovT :: (Monad m, RandomGen g) => MarkovT g s m a -> g -> s -> m ((a, g), s)
 runMarkovT (MarkovT m) g s = runStateT (runRandT m g) s
 
---type Markov g s = MarkovT g s Identity
 newtype Markov g s a = Markov (MarkovT g s Identity a)
   deriving(Functor, Monad, MonadRandom, MonadState s)
 
