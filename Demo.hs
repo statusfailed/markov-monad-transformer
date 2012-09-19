@@ -36,6 +36,7 @@ countTwo :: (a -> Bool) -> [a] -> (Int, Int)
 countTwo f xs = foldl g (0, 0) xs
   where g (a', a) x = if f x then (a'+1,a) else (a', a+1)
 
+-- Do 1000 transitions and count how many of each state there were.
 main = do
   gen <- newStdGen
   let cs = replicateM 1000 chain
