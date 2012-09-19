@@ -9,7 +9,7 @@ import Control.Monad.State
 import Control.Monad.Random
 import Control.Monad.Markov
 
--- Helper for @transition@
+-- Helper for @transition@: gives cumulative sum of first item in tuple.
 cumulative :: Num a => [(a, t)] -> [(a, t)]
 cumulative = scanl1 f
   where f (a, _) (p, x) = (a + p, x)
@@ -25,20 +25,20 @@ transition ps = do
                       [] -> last ps
                       x:xs -> x
 
-
+-- | A state type of only two values
 data S = A | B deriving(Show, Eq)
+
+-- | The transition function for both A and B.
+chain :: (MonadState S m, MonadRandom m) => m S
+chain = transition [(0.2, A), (0.8, B)] >>= put >> get >>= return
 
 countTwo :: (a -> Bool) -> [a] -> (Int, Int)
 countTwo f xs = foldl g (0, 0) xs
   where g (a', a) x = if f x then (a'+1,a) else (a', a+1)
 
-chain :: (MonadState S m, MonadRandom m) => m S
-chain = transition [(0.2, A), (0.8, B)] >>= put >> get >>= return
-
 main = do
   gen <- newStdGen
   let cs = replicateM 1000 chain
   let ((as,gen'), s) = runMarkov cs gen A
-  {-print a-}
   let r = countTwo (==A) as
   print r
